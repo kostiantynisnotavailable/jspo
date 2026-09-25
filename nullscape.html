@@ -1,0 +1,31 @@
+<style>
+.t1{width:20px;height:20px;padding:0px;border:0px;}.t0{width:20px;height:20px;padding:0px;background-color:#fff;}td{border:0px;padding:0px;}
+</style>
+<button onclick="rescale(-1)">-</button>
+<button onclick="rescale(1)">+</button>
+<button onclick="rescale(0)">Refresh!</button>
+<br><br><wrapper id="main"></wrapper>
+<script>
+cs=3;
+createTable(cs);
+function createTable(size){
+	var tbody = '';
+	for( var i=0; i<size; i++){
+		var theader = '<div><table border="1">\n';
+		tbody += '<tr>';
+		for( var j=0; j<size; j++){
+			tbody += '<td><button class="t'+Math.floor(Math.random()*2)+'"></button></td>';
+                }
+		tbody += '</tr>\n';
+	var tfooter = '</table></div>';
+	document.getElementById('main').innerHTML = theader + tbody + tfooter;
+	}
+}
+function rescale(ds){
+	cs=Math.max(2,cs+ds);
+	createTable(cs);
+}
+document.addEventListener("keypress",function(event){
+	for(i=0;i<3;i++){if(event.code==["Equal","Minus","KeyR"][i]){rescale([1,-1,0][i]);}}
+})
+</script>
