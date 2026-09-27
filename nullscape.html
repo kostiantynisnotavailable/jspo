@@ -1,29 +1,40 @@
 <style>
-.t1{width:20px;height:20px;padding:0px;border:0px;}.t0{width:20px;height:20px;padding:0px;background-color:#fff;}td{border:0px;padding:0px;}
+.t0{width:20px;height:20px;padding:0px;border:0px;}.t1{width:20px;height:20px;padding:0px;background-color:#fff;}td{border:0px;padding:0px;}
 </style>
 <button onclick="rescale(-1)">-</button>
 <button onclick="rescale(1)">+</button>
 <button onclick="rescale(0)">Refresh!</button>
 <br><br><wrapper id="main"></wrapper>
 <script>
-cs=3;
+let cs=3;let left=0;
 createTable(cs);
 function createTable(size){
-	var tbody = '';
-	for( var i=0; i<size; i++){
-		var theader = '<div><table border="1">\n';
-		tbody += '<tr>';
-		for( var j=0; j<size; j++){
-			tbody += '<td><button class="t'+Math.floor(Math.random()*2)+'"></button></td>';
+	var tbody='';left=0;
+	for(var i=0;i<size;i++){
+		var theader='<div><table border="1">\n';
+		tbody+='<tr>';
+		for(var j=0;j<size;j++){
+			let temp=Math.round(Math.random());left+=temp;
+			tbody+='<td><button class="t'+temp+'" id="'+j+','+i+'" onclick="move('+j+','+i+')"></button></td>';
                 }
-		tbody += '</tr>\n';
-	var tfooter = '</table></div>';
+		tbody+='</tr>\n';
+	var tfooter='</table></div>';
 	document.getElementById('main').innerHTML = theader + tbody + tfooter;
 	}
 }
 function rescale(ds){
 	cs=Math.max(2,cs+ds);
 	createTable(cs);
+}
+function move(x,y){
+	if(left>0){
+		for(let d=0;d<5;d++){
+			let tx=x+[0,1,0,-1,0][d];let ty=y+[0,0,1,0,-1][d];
+			if(Math.min(tx,ty)<0||Math.max(tx,ty)>=cs){continue;}
+			let temp=document.getElementById(tx+','+ty).className[1];left+=1-2*temp;
+			document.getElementById(tx+','+ty).className="t"+(1-temp);
+		}if(left<1){alert("Solved!");rescale(0);}
+	}
 }
 document.addEventListener("keypress",function(event){
 	for(i=0;i<3;i++){if(event.code==["Equal","Minus","KeyR"][i]){rescale([1,-1,0][i]);}}
