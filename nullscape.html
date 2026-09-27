@@ -4,7 +4,12 @@
 <button onclick="rescale(-1)">-</button>
 <button onclick="rescale(1)">+</button>
 <button onclick="rescale(0)">Refresh!</button>
+<button onclick="sizeInput()">Enter Scale</button>
 <br><br><wrapper id="main"></wrapper>
+<h1 style="margin-bottom:0;">Keybinds</h1>
+<div>Plus/minus keys: scale up/down one
+<br>R key: refresh board
+<br>Enter: enter scale (reduces board loading)</div>
 <script>
 let cs=3;let left=0;
 createTable(cs);
@@ -19,11 +24,17 @@ function createTable(size){
                 }
 		tbody+='</tr>\n';
 	var tfooter='</table></div>';
-	document.getElementById('main').innerHTML = theader + tbody + tfooter;
+	document.getElementById('main').innerHTML=theader+tbody+tfooter;
 	}
 }
 function rescale(ds){
 	cs=Math.max(2,cs+ds);
+	createTable(cs);
+}
+function sizeInput(){
+	let temp=0;
+	while(temp<2||isNaN(temp)||temp%1>0){temp=Number(prompt("Scale of board?"));}
+	cs=temp;
 	createTable(cs);
 }
 function move(x,y){
@@ -38,5 +49,6 @@ function move(x,y){
 }
 document.addEventListener("keypress",function(event){
 	for(i=0;i<3;i++){if(event.code==["Equal","Minus","KeyR"][i]){rescale([1,-1,0][i]);}}
+	if(event.code=="Enter"){sizeInput()};
 })
 </script>
