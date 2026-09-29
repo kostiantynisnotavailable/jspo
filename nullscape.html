@@ -11,31 +11,39 @@
 <br>R key: refresh board
 <br>Enter: enter scale (reduces board loading)</div>
 <script>
-let cs=3;let left=0;
-createTable(cs);
+let cs=3;let left=1;
+rescale(0);
 function createTable(size){
-	var tbody='';left=0;
-	for(var i=0;i<size;i++){
+	var tbody='';left=1;
+	for(let i=0;i<size;i++){
 		var theader='<div><table border="1">\n';
 		tbody+='<tr>';
-		for(var j=0;j<size;j++){
-			let temp=Math.round(Math.random());left+=temp;
-			tbody+='<td><button class="t'+temp+'" id="'+j+','+i+'" onclick="move('+j+','+i+')"></button></td>';
+		for(let j=0;j<size;j++){
+			tbody+='<td><button class="t0" id="'+j+','+i+'" onclick="move('+j+','+i+')"></button></td>';
                 }
 		tbody+='</tr>\n';
 	var tfooter='</table></div>';
 	document.getElementById('main').innerHTML=theader+tbody+tfooter;
 	}
 }
+function generatePattern(size){
+	for(let i=0;i<size;i++){
+		for(let j=0;j<size;j++){
+			if(Math.round(Math.random())){move(i,j);}
+		}
+	}left--;
+}
 function rescale(ds){
 	cs=Math.max(2,cs+ds);
 	createTable(cs);
+	generatePattern(cs);
 }
 function sizeInput(){
 	let temp=0;
 	while(temp<2||isNaN(temp)||temp%1>0){temp=Number(prompt("Scale of board?"));}
 	cs=temp;
 	createTable(cs);
+	generatePattern(cs);
 }
 function move(x,y){
 	if(left>0){
