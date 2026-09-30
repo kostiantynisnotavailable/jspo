@@ -1,16 +1,19 @@
 <style>
-.t0{width:20px;height:20px;padding:0px;border:0px;}.t1{width:20px;height:20px;padding:0px;background-color:#fff;}td{border:0px;padding:0px;}
+.t0{width:20px;height:20px;padding:0px;border:0px;}
+.t1{width:20px;height:20px;padding:0px;background-color:#fff;}td{border:0px;padding:0px;}
+body{margin:0px;}main{margin:8px;}
 </style>
+<img src="headerbg.gif" id="headerbg" style="object-fit:cover;height:100px;width:100vw;">
+<main>
 <button onclick="rescale(-1)">-</button>
 <button onclick="rescale(1)">+</button>
 <button onclick="rescale(0)">Refresh!</button>
 <button onclick="sizeInput()">Enter Scale</button>
-<br><br><wrapper id="main"></wrapper>
+<br><br><wrapper id="game"></wrapper>
 <h1 style="margin-bottom:0;">Keybinds</h1>
 <div>Plus/minus keys: scale up/down one
-<br>R key: refresh board
-<br>Enter: enter scale (reduces board loading)</div>
-<script>
+<br>R key: refresh board</div>
+</main><script>
 let cs=3;let left=1;
 rescale(0);
 function createTable(size){
@@ -23,7 +26,7 @@ function createTable(size){
                 }
 		tbody+='</tr>\n';
 	var tfooter='</table></div>';
-	document.getElementById('main').innerHTML=theader+tbody+tfooter;
+	document.getElementById('game').innerHTML=theader+tbody+tfooter;
 	}
 }
 function generatePattern(size){
@@ -57,6 +60,5 @@ function move(x,y){
 }
 document.addEventListener("keypress",function(event){
 	for(i=0;i<3;i++){if(event.code==["Equal","Minus","KeyR"][i]){rescale([1,-1,0][i]);}}
-	if(event.code=="Enter"){sizeInput()};
 })
 </script>
