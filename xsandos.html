@@ -1,0 +1,67 @@
+<style>#main{margin-bottom:2px;}.pw{margin-bottom:7px;display:none;margin-top:11px;}#post{display:none;}.p0{border-color:#88f;}.p1{border-color:#f44;}.p{border-style:solid;padding:2px;margin:2px;border-width:2px;}
+body{margin:0px;}main{margin:8px;margin-top:108px;}
+</style>
+<title>X's and O's</title>
+<link rel="icon" href="https://yt3.googleusercontent.com/tbWDWdr6NJ68vaEl264rZi20rciqqOIkwBxyNbQ-wv_nIx11FlgSepyliEcX9Tz_3dF1Tfn-0Q=s120-c-k-c0x00ffffff-no-rj">
+<script>
+const cdl=[5,3];
+const cdx=[2,4];
+const msg=["Player 1 wins!","Player 2 wins!","Draw!"];
+let main="";let who=0;let last=[];let ws=0;let temp=0;let lid=[[],[]];
+let pw=[new Array(2**cdl[0]).fill(0),new Array(2**cdl[1]).fill(0)];
+function play(move){
+	main+=["X","O"][move];who=!who;last.push(move);
+	if(last.length>Math.max(...cdl)){last.splice(0,1);}
+	for(i=0;i<2;i++){
+		temp=0;
+		if(last.length>=cdl[i]){for(j=0;j<(cdl[i]);j++){
+			temp+=(last[last.length-j-1])*(2**j);
+		}}else{temp=-1;}
+		if(temp>-1&&!lid[i].includes(temp)){pw[i][temp]++;}
+		if(lid[i].includes(temp)){lid[i].push(-1);}else{lid[i].push(temp);}
+		if(lid[i].length>=cdl[i]){lid[i].splice(0,1);}
+		if(Math.max(...pw[i])==cdx[i]){
+			ws+=1+i;document.getElementById('pw'+i).style.display="block";document.getElementById('pw'+i).innerText="";
+			for(j=0;j<main.length;j++){
+				if(main.slice(j,j+cdl[i])==main.slice(main.length-cdl[i])){
+					temp=document.createElement("span");
+					temp.innerText=main.slice(j,j+cdl[i]);
+					temp.classList.add("p"+i);temp.classList.add("p");
+					if(j<1){temp.style.marginLeft="0px";}
+					document.getElementById('pw'+i).appendChild(temp);
+					j+=cdl[i]-1;}else{
+					temp=document.createElement("span");
+					temp.innerText=main[j];
+					document.getElementById('pw'+i).appendChild(temp);
+		}}}}if(ws>0){
+		document.getElementById('game').style.display="none";
+		document.getElementById('post').style.display="inline";
+		document.getElementById('msg').innerText=msg[ws-1];
+	}else{document.getElementById('main').innerText=main;}
+	document.getElementById('turn').innerText=who+1;
+}function reset(){
+	main="";who=0;last=[];ws=0;pw=[new Array(2**cdl[0]).fill(0),new Array(2**cdl[1]).fill(0)];lid=[[],[]];
+	document.getElementById('game').style.display="inline";
+	document.getElementById('post').style.display="none";
+	document.getElementById('main').innerText="";
+	for(i=0;i<2;i++){document.getElementById('pw'+i).style.display="none";}
+	document.getElementById('turn').innerText=1;}
+document.addEventListener("keypress",function(event){
+	for(i=0;i<2;i++){if(event.code==["KeyX","KeyO"][i]&&ws<1){play(i);}
+	else if(event.code==["Enter","KeyR"][Number(!ws)]){reset();}}});
+</script><header style="position:fixed;top:0px;z-index:1;">
+<img src="headerbg.gif" style="object-fit:cover;height:100px;width:100dvw;position:absolute;">
+<img src="logo.png" style="position:absolute;margin-left:8px;margin-top:8px;">
+</header><main>
+<div id="game">
+<p id="main"></p>
+Player <span id="turn">1</span>'s Turn!
+<button onclick="play(0)">X</button>
+<button onclick="play(1)">O</button>
+</div>
+<p id="pw0" class="pw"></p>
+<p id="pw1" class="pw"></p>
+<div id="post">
+<span id="msg"></span>
+<button onclick="reset()">RESET</button>
+</div></main>

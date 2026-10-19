@@ -1,0 +1,51 @@
+<style>
+body{margin:0px;}main{margin:8px;margin-top:108px;}
+.soggies{width:200px;border:1px solid;padding:2px;}
+</style>
+<header style="position:fixed;top:0px;z-index:1;">
+<img src="headerbg.gif" style="object-fit:cover;height:100px;width:100dvw;position:absolute;">
+<img src="logo.png" style="position:absolute;margin-left:8px;margin-top:8px;">
+</header><main>
+<img id="soggy0" class="soggies">
+<img id="soggy1" class="soggies"><br>
+Which image is correct? <select name="answer" id="answer">
+<option value="0">Left</option>
+<option value="1">Right</option>
+</select> <button onclick="checkAnswer()">Submit</button>
+<h1 style="margin-bottom:0;">Statistics</h1>
+Current Streak: <span id="curr">0</span>
+<br>Best Streak: <span id="best">0</span><br>
+<button onclick="resetcookie()">Reset Best</button>
+<h1 style="margin-bottom:0;">Keybinds</h1>
+<div>A/D key: submit left/right<br>
+<span style="color:red;">WARNING: AUTO-SUBMITS ANSWER!</span></div>
+</main><script>
+const urls=["https://mirror.guweh.com/webp.json","https://mirror.guweh.com/"];
+let flip=0;let data="";let curr=0;let best=0;
+const request=new XMLHttpRequest();
+request.open('GET',urls[0]);
+request.responseType='json';
+request.send();
+request.onload=processData;
+function processData(){data=request.response;loadImages();}
+function loadImages(){
+	const image=urls[1]+data[Math.floor(Math.random()*data.length)];
+	flip=Math.round(Math.random());
+	for(i=0;i<2;i++){
+		document.getElementById("soggy"+i).src="";
+		document.getElementById("soggy"+i).style.transform="ScaleX("+[1,-1][(flip+i)%2]+")";
+		document.getElementById("soggy"+i).src=image;
+}}
+function checkAnswer(){
+	if(document.getElementById("answer").value!=flip){alert("Incorrect!");curr=0;}
+	else{alert("Correct!");curr++;}
+	document.getElementById("curr").innerHTML=curr;
+	if(best<curr){best=curr;}
+	document.getElementById("best").innerHTML=best;
+	flip=0;loadImages();
+}
+document.addEventListener("keypress",function(event){
+	for(i=0;i<2;i++){if(event.code==["KeyA","KeyD"][i]){
+	document.getElementById("answer").value=i;checkAnswer();}}
+})
+</script>
