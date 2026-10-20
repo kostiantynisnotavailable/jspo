@@ -1,9 +1,22 @@
 <style>#main{margin-bottom:2px;}.pw{margin-bottom:7px;display:none;margin-top:11px;}#post{display:none;}.p0{border-color:#88f;}.p1{border-color:#f44;}.p{border-style:solid;padding:2px;margin:2px;border-width:2px;}
 body{margin:0px;}main{margin:8px;margin-top:108px;}
-</style>
-<title>X's and O's</title>
-<link rel="icon" href="https://yt3.googleusercontent.com/tbWDWdr6NJ68vaEl264rZi20rciqqOIkwBxyNbQ-wv_nIx11FlgSepyliEcX9Tz_3dF1Tfn-0Q=s120-c-k-c0x00ffffff-no-rj">
-<script>
+</style><title>coolasswebsite</title><link rel="icon" href="xicon.png">
+<header style="position:fixed;top:0px;z-index:1;">
+<img src="headerbg.gif" style="object-fit:cover;height:100px;width:100dvw;position:absolute;">
+<img src="logo.png" style="position:absolute;margin-left:12px;">
+</header><main>
+<div id="game">
+<p id="main"></p>
+Player <span id="turn">1</span>'s Turn!
+<button onclick="play(0)">X</button>
+<button onclick="play(1)">O</button>
+</div>
+<p id="pw0" class="pw"></p>
+<p id="pw1" class="pw"></p>
+<div id="post">
+<span id="msg"></span>
+<button onclick="reset()">RESET</button>
+</div></main><script>
 const cdl=[5,3];
 const cdx=[2,4];
 const msg=["Player 1 wins!","Player 2 wins!","Draw!"];
@@ -49,19 +62,4 @@ function play(move){
 document.addEventListener("keypress",function(event){
 	for(i=0;i<2;i++){if(event.code==["KeyX","KeyO"][i]&&ws<1){play(i);}
 	else if(event.code==["Enter","KeyR"][Number(!ws)]){reset();}}});
-</script><header style="position:fixed;top:0px;z-index:1;">
-<img src="headerbg.gif" style="object-fit:cover;height:100px;width:100dvw;position:absolute;">
-<img src="logo.png" style="position:absolute;margin-left:8px;margin-top:8px;">
-</header><main>
-<div id="game">
-<p id="main"></p>
-Player <span id="turn">1</span>'s Turn!
-<button onclick="play(0)">X</button>
-<button onclick="play(1)">O</button>
-</div>
-<p id="pw0" class="pw"></p>
-<p id="pw1" class="pw"></p>
-<div id="post">
-<span id="msg"></span>
-<button onclick="reset()">RESET</button>
-</div></main>
+</script>
