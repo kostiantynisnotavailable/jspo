@@ -1,0 +1,134 @@
+<canvas id="board" width="320" height="320" style="border:1px solid;padding:2px;"></canvas>
+<img src="fruit.webp" id="fruit" style="display:none;">
+<img src="cactus.webp" id="cactus" style="display:none;">
+<img src="player.webp" id="player" style="display:none;">
+<table style="border:1px solid;margin-top:4px;padding:1px;"><td id="timer">0.000</td></table>
+<h1 style="margin:0px;margin-bottom:4px;">Settings</h1>Rounds: <select id="rounds">
+<option value="1">1 (Solo)</option>
+<option value="5">5 (XXXS)</option>
+<option value="7">7 (XXS)</option>
+<option value="10">10 (XS)</option>
+<option value="15">15 (Short)</option>
+<option value="25" selected="selected">25 (Default)</option>
+<option value="40">40 (Long)</option>
+<option value="65">65 (XL)</option>
+<option value="100">100 (XXL)</option>
+<option value="150">150 (XXXL)</option>
+<option value="9999">9999 (Marathon)</option>
+</select><br>
+<button onclick="genwaitroom();movePlayer([0,0]);">Reset
+</button> (Shortcut is R key)<style>
+td{background-color:#000;color:#8f0;padding:4px 8px;font-size:2em;}
+</style><script>
+const size=40;const inset=2;
+const board=document.getElementById("board");
+const ctx=board.getContext("2d");
+const player=document.getElementById("player");
+const fruit=document.getElementById("fruit");
+let playerPos=[Math.floor(Math.random()*8),Math.floor(Math.random()*8)];
+let fruitPos=[0,0];let prev=15;
+let cacti=[];let st=0;
+let alive=1;let round=0;
+function drawCanvas(){
+	for(i=0;i<64;i++){
+		ctx.fillStyle=["#c3d6c3","#b5c9b5"][(i+Math.floor(i/8))%2];
+		ctx.fillRect((i%8)*size,Math.floor(i/8)*size,size,size);
+	}
+}
+function drawImage(image,pos){
+	ctx.drawImage(image,size*pos[0]+inset,size*pos[1]+inset,size-2*inset,size-2*inset);
+}
+function drawBox(pos){
+	ctx.fillStyle="black";
+	ctx.fillRect(size*pos[0],size*pos[1],size,size);
+}
+function genwaitroom(){
+	document.getElementById("rounds").disabled=false;
+	if(document.getElementById("timer").style.color!="rgb(68, 187, 255)"){
+		document.getElementById("timer").innerText="0.000";
+		document.getElementById("timer").style.color="8f0";}
+	round=0;cacti=[];alive=1;
+	fruitPos=Math.floor(Math.random()*63);
+	if(fruitPos>=playerPos[0]*8+playerPos[1]){fruitPos++;}
+	fruitPos=[(fruitPos-fruitPos%8)/8,fruitPos%8];
+}
+function resetTime(){
+	if(document.getElementById("timer").innerText!="0.000"){
+	if(!confirm("Selecting a different setting will wipe your current time. Proceed?")){
+	document.getElementById("rounds").value=prev;}
+		else{document.getElementById("timer").innerText="0.000";
+		document.getElementById("timer").style.color="8f0";}}
+	prev=document.getElementById("rounds").value;
+}
+function updateTimer(){
+	if(round>0&&alive){
+		document.getElementById("timer").innerText=((Date.now()-st)/1000).toFixed(3);
+		requestAnimationFrame(updateTimer);}
+}
+function gencacti(){
+	cacti=[];let temp=[];let pick=0;
+	for(let i=0;i<64;i++){
+		temp.push(i);
+	}
+	temp.splice(playerPos[0]*8+playerPos[1],1);
+	while(temp.length>0){
+		pick=temp[Math.floor(Math.random()*temp.length)];
+		cacti.push([(pick-pick%8)/8,pick%8]);
+		for(let i=-2;i<3;i++){
+			for(let j=-2+Math.abs(i);j<3-Math.abs(i);j++){
+				if(Math.min((pick-pick%8)/8+i,pick%8+j)>=0
+				&&Math.max((pick-pick%8)/8+i,pick%8+j)<8){
+					if(temp.includes(pick+8*i+j)){
+						temp.splice(temp.indexOf(pick+8*i+j),1);
+	}}}}}
+	temp=[];
+	for(let i=0;i<64;i++){
+		temp.push(i);
+	}
+	temp.splice(playerPos[0]*8+playerPos[1],1);
+	for(let i=0;i<cacti.length;i++){
+		temp.splice(temp.indexOf(cacti[i][0]*8+cacti[i][1]),1);
+	}
+	for(let i=-5;i<6;i++){
+		for(let j=-5+Math.abs(i);j<6-Math.abs(i);j++){
+			if(Math.min(playerPos[0]+i,playerPos[1]+j)>=0
+			&&Math.max(playerPos[0]+i,playerPos[1]+j)<8){
+				if(temp.includes(8*playerPos[0]+playerPos[1]+8*i+j)){
+					temp.splice(temp.indexOf(8*playerPos[0]+playerPos[1]+8*i+j),1);
+	}}}}
+	pick=temp[Math.floor(Math.random()*temp.length)];
+	fruitPos=[(pick-pick%8)/8,pick%8];
+}
+function movePlayer(deltaPos){
+	if(alive){playerPos=
+[Math.max(Math.min(playerPos[0]+deltaPos[0],7),0),Math.max(Math.min(playerPos[1]+deltaPos[1],7),0)];}
+	drawCanvas();
+	if(String(fruitPos)==String(playerPos)&&alive){
+		if(round>=document.getElementById("rounds").value){
+			document.getElementById("timer").style.color="4bf";genwaitroom();
+		}else{
+			if(round<1){st=Date.now();requestAnimationFrame(updateTimer);
+			document.getElementById("rounds").disabled=true;}
+			document.getElementById("timer").style.color="8f0";gencacti();round++;
+		}
+	}
+	for(let i=0;i<cacti.length;i++){
+		drawImage(cactus,cacti[i]);
+		if(String(cacti[i])==String(playerPos)){
+			alive=0;document.getElementById("timer").style.color="f44";
+		}
+	}
+	drawBox(fruitPos);drawImage(fruit,fruitPos);
+	if(alive){drawBox(playerPos);drawImage(player,playerPos);}
+}
+genwaitroom();
+player.addEventListener("load", (e) => {
+	movePlayer([0,0]);
+});
+document.getElementById("rounds").addEventListener('change',resetTime);
+document.addEventListener("keypress",function(event){
+	for(i=0;i<4;i++){if(event.code==["KeyW","KeyA","KeyS","KeyD"][i]){
+	movePlayer([[0,-1],[-1,0],[0,1],[1,0]][i])}}
+	if(event.code=="KeyR"){genwaitroom();movePlayer([0,0]);}
+})
+</script>

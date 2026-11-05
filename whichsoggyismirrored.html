@@ -40,7 +40,7 @@ function checkAnswer(){
 	if(document.getElementById("answer").value!=flip){alert("Incorrect!");curr=0;}
 	else{alert("Correct!");curr++;}
 	document.getElementById("curr").innerHTML=curr;
-	if(best<curr){best=curr;}
+	if(best<curr){best=curr;document.cookie="best="+best+";path=/";console.log(document.cookie);}
 	document.getElementById("best").innerHTML=best;
 	flip=0;loadImages();
 }
