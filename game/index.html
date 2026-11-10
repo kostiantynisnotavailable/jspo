@@ -38,10 +38,6 @@ function drawCanvas(){
 function drawImage(image,pos){
 	ctx.drawImage(image,size*pos[0]+inset,size*pos[1]+inset,size-2*inset,size-2*inset);
 }
-function drawBox(pos){
-	ctx.fillStyle="black";
-	ctx.fillRect(size*pos[0],size*pos[1],size,size);
-}
 function genwaitroom(){
 	document.getElementById("rounds").disabled=false;
 	if(document.getElementById("timer").style.color!="rgb(68, 187, 255)"){
@@ -118,8 +114,8 @@ function movePlayer(deltaPos){
 			alive=0;document.getElementById("timer").style.color="f44";
 		}
 	}
-	drawBox(fruitPos);drawImage(fruit,fruitPos);
-	if(alive){drawBox(playerPos);drawImage(player,playerPos);}
+	drawImage(fruit,fruitPos);
+	if(alive){drawImage(player,playerPos);}
 }
 genwaitroom();
 player.addEventListener("load", (e) => {
