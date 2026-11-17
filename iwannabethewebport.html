@@ -1,16 +1,18 @@
 <style>
-body{margin:0px;}main{margin:8px;margin-top:108px;}
+body{margin:0px;}main{margin:8px;margin-top:108px;}#plc{margin:4px;}
 </style><title>coolasswebsite</title><link rel="icon" href="images/xicon.webp">
 <header style="position:fixed;top:0px;z-index:1;">
 <img src="images/headerbg.gif" style="object-fit:cover;height:100px;width:100dvw;position:absolute;">
 <img src="images/logo.webp" style="position:absolute;margin-left:12px;">
 </header><main>
-<canvas id="board" width="640" height="320" style="border:1px solid;padding:2px;image-rendering:pixelated;"></canvas>
-<br><select id="maps" style="margin:4px 0px;"></select><br>Player color: <input type="color" id="plc"></input><br>Input custom level:<br>
-<input type="text" id="mapInput"></input><button onclick="loadMap();">Submit</button>
+<canvas id="board" width="640" height="320" style="border:1px solid;padding:2px;image-rendering:pixelated;">
+</canvas><br><select id="maps" style="margin:4px 0px;"></select> <button onclick="full();">Fullscreen</button>
+<br>Input custom level:<input type="text" id="mapInput"></input> <button onclick="loadMap();">
+Submit</button><br>Player color:<br><input type="color" id="plc"></input>
 </main><script>
 const board=document.getElementById("board");
 const ctx=board.getContext("2d");
+function full(){document.getElementById("board").requestFullscreen();}
 function fill_rect(x,y,dx,dy,color){
 	if(color=="0"){ctx.fillStyle="black"}
         else if(color[0]=="#"){ctx.fillStyle=color;}
